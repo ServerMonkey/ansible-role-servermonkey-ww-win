@@ -1,0 +1,2 @@
+# undefined variable, please define with set_fact or in playbook
+#servermonkey_debug: false  # devs only

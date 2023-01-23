@@ -1,0 +1,24 @@
+---
+#info: this lets you use include_role with shell scripts
+- name: Set path
+  set_fact:
+    task_file: '{{ role_path }}/tasks/{{ task }}'
+  run_once: true
+
+- name: Check for {{ task }}.yml
+  connection: local
+  stat:
+    path: '{{ task_file }}.yml'
+  register: task_is_yml
+  run_once: true
+  become: false
+
+- name: Include yml
+  include_tasks: '{{ task_file }}.yml'
+  when: task_is_yml.stat.exists
+
+- name: Include sh
+  include_role: name=servermonkey.sh
+  vars:
+    sh: '{{ task_file }}.sh'
+  when: not task_is_yml.stat.exists
